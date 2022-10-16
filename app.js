@@ -1,3 +1,4 @@
+const row = document.querySelector('.row')
 const cards = document.getElementById('cards')
 const items = document.getElementById('items')
 const footer = document.getElementById('footer')
@@ -6,6 +7,8 @@ const templateFooter = document.getElementById('template-footer').content
 const templateCarrito = document.getElementById('template-carrito').content
 const fragment = document.createDocumentFragment()
 const drop = document.getElementById('drop')
+const search = document.getElementById('search')
+const inp = document.getElementById('in')
 let carrito = {}
 
 // Eventos
@@ -18,35 +21,43 @@ items.addEventListener('click', e => { btnAumentarDisminuir(e) })
 // Pintar productos
 const url = 'https://bsaleback-end-production.up.railway.app/api'
 
+const urlC = 'https://bsaleback-end-production.up.railway.app/api/category?cat='
+
+const urlS = 'https://bsaleback-end-production.up.railway.app/api/search?name='
+
 cards.addEventListener('click', e => {
     addCarrito(e)
 })
 
-drop.querySelectorAll('a')[0].addEventListener('click', () =>{
-    console.log(drop.querySelectorAll('a')[0])
-    //window.location.href = `./category.html?=cat${drop.querySelectorAll('a')[0]}`
+drop.addEventListener('click', e =>{
+    
+    const r = e.target.id
+    
+    fetch(urlC + r).then(res => res.json()).then(data =>{ draw(data)})
+
 })
 
+search.addEventListener('click', e =>{
+    console.log(inp.value)
+    const S = inp.value
+    fetch(urlS + S).then(res => res.json()).then(data =>{ draw(data)})
+})
 
+fetchData = async() =>{
+    fetch(url).then(res => res.json()).then(data =>{ draw(data)})
 
-const fetchData = async() => {
-    await fetch(url).then(res => res.json()).then(data=> {
-    
-    draw(data)
-
-}).catch(err => console.log(err));
 }
 
 const draw = data => {
     data.forEach(element => {
-        if(element.category===1){
+        row.innerHTML=''
         templateCard.querySelector('h5').textContent = element.name
         templateCard.querySelector('p').textContent = `${element.price}`
         templateCard.querySelector('img').setAttribute("src",element.url_image)
         templateCard.querySelector('.btn-dark').dataset.id = element.id
         const clone = templateCard.cloneNode(true)
         fragment.appendChild(clone)
-        }
+        
     });
     cards.appendChild(fragment)
 }
