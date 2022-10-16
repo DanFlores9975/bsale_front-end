@@ -23,64 +23,65 @@ items.addEventListener("click", (e) => {
   btnAumentarDisminuir(e);
 });
 cards.addEventListener("click", (e) => {
-    addCarrito(e);
-  });
-  
-  drop.addEventListener("click", (e) => {
-    const r = e.target.id;
-  
-    fetch(urlC + r)
-      .then((res) => res.json())
-      .then((data) => {
-        draw(data);
-      }).catch(err => console.log(err))
-  });
-  
-  search.addEventListener("click", (e) => {
-    
-    const S = inp.value.toUpperCase();
-    fetch(urlS + S)
-      .then((res) => res.json())
-      .then((data) => {
-        draw(data);
-      }).catch(err => console.log(err))
-  });
-  
+  addCarrito(e);
+});
+
+drop.addEventListener("click", (e) => {
+  const r = e.target.id;
+
+  fetch(urlC + r)
+    .then((res) => res.json())
+    .then((data) => {
+      draw(data);
+    })
+    .catch((err) => console.log(err));
+});
+
+search.addEventListener("click", (e) => {
+  const S = inp.value.toUpperCase();
+  fetch(urlS + S)
+    .then((res) => res.json())
+    .then((data) => {
+      draw(data);
+    })
+    .catch((err) => console.log(err));
+});
 
 // Endpoints
 const url = "https://bsaleback-end-production.up.railway.app/api";
 
-const urlC = "https://bsaleback-end-production.up.railway.app/api/category?cat=";
+const urlC =
+  "https://bsaleback-end-production.up.railway.app/api/category?cat=";
 
 const urlS = "https://bsaleback-end-production.up.railway.app/api/search?name=";
-
 
 fetchData = async () => {
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
       draw(data);
-    }).catch(err => console.log(err))
+    })
+    .catch((err) => console.log(err));
 };
 
 const draw = (data) => {
-    if(data.length>3){
-  data.forEach((element) => {
+  if (data.length <= 0) {
+    data.forEach((element) => {
+      row.innerHTML = "";
+      templateCard.querySelector("h5").textContent = element.name;
+      templateCard.querySelector("p").textContent = `${element.price}`;
+      templateCard.querySelector("img").setAttribute("src", element.url_image);
+      templateCard.querySelector(".btn-dark").dataset.id = element.id;
+      const clone = templateCard.cloneNode(true);
+      fragment.appendChild(clone);
+    });
+    cards.appendChild(fragment);
+  } else {
     row.innerHTML = "";
-    templateCard.querySelector("h5").textContent = element.name;
-    templateCard.querySelector("p").textContent = `${element.price}`;
-    templateCard.querySelector("img").setAttribute("src", element.url_image);
-    templateCard.querySelector(".btn-dark").dataset.id = element.id;
-    const clone = templateCard.cloneNode(true);
-    fragment.appendChild(clone);
-  });
-  cards.appendChild(fragment);
-}else{
-    row.innerHTML = "";
-    const p = document.createElement('h5')
-    p.innerHTML = 'El producto que buscas no existe!'
-    row.appendChild(p)
-}
+    const p = document.createElement("h5");
+    p.innerHTML = "El producto que buscas no existe!";
+    row.appendChild(p);
+  }
 };
 
 // Agregar al carrito
