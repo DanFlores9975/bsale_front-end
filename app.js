@@ -65,7 +65,7 @@ fetchData = async () => {
 };
 
 const draw = (data) => {
-  if (data.length <= 0) {
+  if (data.length > 0) {
     data.forEach((element) => {
       row.innerHTML = "";
       templateCard.querySelector("h5").textContent = element.name;
