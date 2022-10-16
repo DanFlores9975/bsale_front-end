@@ -14,7 +14,7 @@
         
         <div class="d-inline-flex p-2 bd-highlight">
         <nav class="navbar navbar-light bg-light" id="nav">
-            <form class="form-inline">
+            <form class="form-inline" method="get" onKeyPress="if(event.keyCode == 13) event.returnValue = false;">
               <input id="in" class="form-control mr-sm-5" type="search" placeholder="Nombre del producto" aria-label="Search">
             </form>
             <button id="search" class="btn btn-outline-success my-1 ml-2" type="submit">Buscar</button>
